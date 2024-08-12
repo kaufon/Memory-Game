@@ -1,15 +1,10 @@
-import { useState } from "react";
+import Cards from "./components/Cards";
 
-function App() {
-  const [cards, setCards] = useState(
-    [ { id: 0, image: "railsurl", cardName: "RoR" },
-    { id: 1, image: "javascripturl", cardName: "JavaScript" } ]
+import Card from "./components/Card";
 
-  )
-  return (
-    <>
-      <h1 className="bg-red-300">Banana</h1>
+function App(){
+  return<>
+    <Cards />
     </>
-  );
 }
 export default App
