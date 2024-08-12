@@ -10,26 +10,33 @@ function Cards() {
       isClicked: false,
     },
   ]);
-  const [highScore, setHighScore] = useState(0);
+  const [score, setScore] = useState(0);
+  const [highestScore,setHighestScore] = useState(0)
   const clickCard = (event: React.MouseEvent<HTMLButtonElement>) => {
     const cardClicked = cards.find(
       (card) => card.cardName === event.currentTarget.name,
     );
     if (cardClicked?.isClicked === true) {
-      setHighScore(0);
+      setScore(0);
+      shuffleCards()
       return;
     }
-    const updatedCards = cards.map(
-      (card) =>
-        card.cardName === cardClicked?.cardName
-          ? { ...card, isClicked: true }
-          : { ...card, isClicked: false },
-      console.log(cards),
+    const updatedCards = cards.map((card) =>
+      card.cardName === cardClicked?.cardName
+        ? { ...card, isClicked: true }
+        : { ...card, isClicked: false },
     );
     setCards(updatedCards);
-    setHighScore((score) => score + 1);
+    setScore((score) => score + 1);
   };
-  
+  const shuffleCards = () => {
+    const shuffledCards = [...cards ].sort(()=> Math.random() -5).map((cards) =>({...cards}));
+    
+    setCards(shuffledCards);
+  };
+
+  useEffect(() =>{  shuffleCards() } , [score]);
+
   return (
     <>
       {cards.map((card) => (
@@ -39,7 +46,8 @@ function Cards() {
           </button>
         </h1>
       ))}
-      <h2>esse e os pontos {highScore}</h2>
+      <h2>esse e os pontos {score}</h2>
+      <h2>seu maior ponto foi {highestScore}</h2>
     </>
   );
 }
