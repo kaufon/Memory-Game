@@ -11,14 +11,14 @@ function Cards() {
     },
   ]);
   const [score, setScore] = useState(0);
-  const [highestScore,setHighestScore] = useState(0)
+  const [highestScore, setHighestScore] = useState(0);
   const clickCard = (event: React.MouseEvent<HTMLButtonElement>) => {
     const cardClicked = cards.find(
       (card) => card.cardName === event.currentTarget.name,
     );
     if (cardClicked?.isClicked === true) {
       setScore(0);
-      shuffleCards()
+      shuffleCards();
       return;
     }
     const updatedCards = cards.map((card) =>
@@ -30,12 +30,20 @@ function Cards() {
     setScore((score) => score + 1);
   };
   const shuffleCards = () => {
-    const shuffledCards = [...cards ].sort(()=> Math.random() -5).map((cards) =>({...cards}));
-    
+    const shuffledCards = [...cards]
+      .sort(() => Math.random() - 5)
+      .map((cards) => ({ ...cards }));
+
     setCards(shuffledCards);
   };
 
-  useEffect(() =>{  shuffleCards() } , [score]);
+  useEffect(() => {
+    shuffleCards();
+    if (score >= highestScore) {
+      setHighestScore(score)
+      
+    }
+  }, [score]);
 
   return (
     <>
