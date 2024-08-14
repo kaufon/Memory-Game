@@ -2,11 +2,52 @@ import { useEffect, useState } from "react";
 
 function Cards() {
   const [cards, setCards] = useState([
-    { id: 0, cardImage: "railsurl", cardName: "RoR", isClicked: false },
+    {
+      id: 0,
+      cardImage: "../../public/deergirl2.png",
+      cardName: "DeerGirl2",
+      isClicked: false,
+    },
     {
       id: 1,
-      cardImage: "javascripturl",
-      cardName: "JavaScript",
+      cardImage: "../../public/shikano1.png",
+      cardName: "deergirl1",
+      isClicked: false,
+    },
+    {
+      id: 2,
+      cardImage: "../../public/deergirl3.png",
+      cardName: "deergirl3",
+      isClicked: false,
+    },
+    {
+      id: 3,
+      cardImage: "../../public/deergirl4.png",
+      cardName: "deergirl4",
+      isClicked: false,
+    },
+    {
+      id: 4,
+      cardImage: "../../public/deergirl5.png",
+      cardName: "deergirl5",
+      isClicked: false,
+    },
+    {
+      id: 5,
+      cardImage: "../../public/blondgirl1.png",
+      cardName: "blondgirl1",
+      isClicked: false,
+    },
+    {
+      id: 6,
+      cardImage: "../../public/blondgirl2.png",
+      cardName: "blondgirl2",
+      isClicked: false,
+    },
+    {
+      id: 7,
+      cardImage: "../../public/blodengirl3.png",
+      cardName: "blondgirl3",
       isClicked: false,
     },
   ]);
@@ -40,22 +81,27 @@ function Cards() {
   useEffect(() => {
     shuffleCards();
     if (score >= highestScore) {
-      setHighestScore(score)
-      
+      setHighestScore(score);
     }
   }, [score]);
 
   return (
     <>
-      {cards.map((card) => (
-        <h1 key={card.cardName}>
-          <button onClick={clickCard} name={card.cardName}>
-            {card.cardName}
-          </button>
-        </h1>
-      ))}
-      <h2>esse e os pontos {score}</h2>
-      <h2>seu maior ponto foi {highestScore}</h2>
+      <div className="flex justify-between fixed border-black bg-white border-2 w-full h-10">
+        <h2>esse e os pontos {score}</h2>
+        <h2>seu maior ponto foi {highestScore}</h2>
+      </div>
+
+      <div className="space-y-2 flex flex-row flex-1 justify-center items-center gap-5">
+        {cards.map((card) => (
+          <h1 key={card.cardName}>
+            <button onClick={clickCard} name={card.cardName}>
+              <img src={card.cardImage} alt={card.cardName} />
+            </button>
+          </h1>
+        ))}
+      </div>
+
     </>
   );
 }
