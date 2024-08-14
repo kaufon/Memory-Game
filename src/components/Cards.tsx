@@ -71,9 +71,10 @@ function Cards() {
     setScore((score) => score + 1);
   };
   const shuffleCards = () => {
-    const shuffledCards = [...cards]
-      .sort(() => Math.random() - 5)
-      .map((cards) => ({ ...cards }));
+    const shuffledCards = cards
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
 
     setCards(shuffledCards);
   };
@@ -87,21 +88,21 @@ function Cards() {
 
   return (
     <>
-      <div className="flex justify-between fixed border-black bg-white border-2 w-full h-10">
-        <h2>esse e os pontos {score}</h2>
-        <h2>seu maior ponto foi {highestScore}</h2>
+      <div className="space-y-2">
+        <div className="flex justify-between bg-black w-full h-24 text-white items-center">
+          <h1 className="text-2xl p-20">{score}</h1>
+          <h2>seu maior ponto foi {highestScore}</h2>
+        </div>
+        <div className="space-y-2 flex flex-row flex-1 justify-center items-center gap-5">
+          {cards.map((card) => (
+            <h1 key={card.cardName}>
+              <button onClick={clickCard} name={card.cardName}>
+                <img src={card.cardImage} alt={card.cardName} />
+              </button>
+            </h1>
+          ))}
+        </div>
       </div>
-
-      <div className="space-y-2 flex flex-row flex-1 justify-center items-center gap-5">
-        {cards.map((card) => (
-          <h1 key={card.cardName}>
-            <button onClick={clickCard} name={card.cardName}>
-              <img src={card.cardImage} alt={card.cardName} />
-            </button>
-          </h1>
-        ))}
-      </div>
-
     </>
   );
 }
