@@ -1,7 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import IGameState from "../entities/IGameState";
+import { CardService } from "../services/cardService";
+import ScoreBoard from "./ScoreBoard";
+import CardComponent from "./Card";
+import { CardUseCase } from "../useCases/cardUseCase";
 
-function Cards() {
-  const [cards, setCards] = useState([
+const initalGameState: IGameState = {
+  cards: [
     {
       id: 0,
       cardImage: "/deergirl2.png",
@@ -50,73 +55,37 @@ function Cards() {
       cardName: "blondgirl3",
       isClicked: false,
     },
-  ]);
-  const [score, setScore] = useState(0);
-  const [highestScore, setHighestScore] = useState(0);
-  const clickCard = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const cardClicked = cards.find(
-      (card) => card.cardName === event.currentTarget.name,
-    );
-    if (cardClicked?.isClicked === true) {
-      setScore(0);
-      shuffleCards();
-      return;
+  ],
+  score:0,
+  highestScore:0,
+};
+const Cards: React.FC = () =>{
+  const [gameState , setGameState] = useState<IGameState>(initalGameState)
+  useEffect(()=>{
+    const newState: IGameState ={
+      ...gameState,
+      cards: CardService.shuffleCards(gameState.cards),
+        
     }
-    const updatedCards = cards.map((card) =>
-      card.cardName === cardClicked?.cardName
-        ? { ...card, isClicked: true }
-        : { ...card, isClicked: false },
-    );
-    setCards(updatedCards);
-    setScore((score) => score + 1);
-  };
-  const shuffleCards = () => {
-    const shuffledCards = cards
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
-
-    setCards(shuffledCards);
-  };
-
-  useEffect(() => {
-    shuffleCards();
-    if (score >= highestScore) {
-      setHighestScore(score);
+    if (newState.score > newState.highestScore) {
+      newState.highestScore = newState.score
     }
-  }, [score]);
-
+    setGameState(newState)
+  },[gameState.score])
+  const handleClick = (clickedCardName:string) =>{
+    setGameState(CardUseCase.handleCardClick(gameState,clickedCardName))
+  }
   return (
     <>
-      <div className="space-y-2">
-        <div className="flex justify-between bg-black w-full h-24 text-white items-center">
-          <h1 className="text-2xl p-5 bg-gray-800 border-4 border-gray-900 font-bold  italic   rounded-full text-gray-300 ">
-            Streak: {score}
-          </h1>
-          <h1 className="text-2xl p-5 bg-gray-800 border-4 border-gray-900 font-bold  italic   rounded-full text-gray-300">
-            Top Points: {highestScore}
-          </h1>
-        </div>
-        <div className="flex justify-center items-center min-h-screen ">
-          <div className="grid grid-cols-3 gap-3  ">
-            {cards.map((card) => (
-              <button
-                onClick={clickCard}
-                name={card.cardName}
-                key={card.cardName}
-                className=" "
-              >
-                <img
-                  src={card.cardImage}
-                  alt={card.cardName}
-                  className="w-64 h-56 rounded-full border-4 border-orange-950"
-                />
-              </button>
-            ))}
+      <ScoreBoard gameState={gameState}/>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="grid grid-cols-3 gap-3">
+          {gameState.cards.map(card =>(
+          <CardComponent key={card.id} card={card} onClick={handleClick}/>
+          ))}
           </div>
         </div>
-      </div>
-    </>
-  );
+      </>
+  )
 }
-export default Cards;
+export default Cards

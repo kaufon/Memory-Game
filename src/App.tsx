@@ -1,10 +1,9 @@
+import React from "react";
 import Cards from "./components/Cards";
 
-import Card from "./components/Card";
-
-function App(){
-  return<>
+const App: React.FC = () => (
+  <div>
     <Cards />
-    </>
-}
+    </div>
+)
 export default App
